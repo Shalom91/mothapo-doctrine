@@ -27,7 +27,7 @@ def main():
     # Format: https://shalom91.github.io/YYYY/MM/DD/slug/
     date_parts = date.split("-") if date else ["", "", ""]
     year, month, day = date_parts[0], date_parts[1], date_parts[2]
-    post_url = f"https://shalom91.github.io/{year}/{month}/{day}/{slug}/"
+    post_url = f"https://shalom91.github.io/mothapo-doctrine/{year}/{month}/{day}/{slug}/"
 
     # Write to GitHub Actions output
     output_file = os.environ.get("GITHUB_OUTPUT", "")
