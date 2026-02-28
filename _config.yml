@@ -1,0 +1,43 @@
+title: "The Mothapo Doctrine"
+description: "Critical analysis of geopolitics, AI, finance, and the forces shaping the world. No noise. No agenda. Just honest inquiry."
+baseurl: ""
+url: "https://shalom91.github.io"
+repository: "Shalom91/mothapo-doctrine"
+
+author:
+  name: "Molash Mothapo"
+
+# Build settings
+theme: null
+markdown: kramdown
+highlighter: rouge
+permalink: /:year/:month/:day/:title/
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Collections
+defaults:
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+
+# Exclude from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - .github
+  - README.md
+
+# Feed
+feed:
+  path: feed.xml
+
+paginate: 10
+paginate_path: "/page:num/"

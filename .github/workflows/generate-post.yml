@@ -1,0 +1,59 @@
+name: Generate Post
+
+on:
+  schedule:
+    # Monday at 06:00 UTC (08:00 SAST) — Geopolitics
+    - cron: '0 6 * * 1'
+    # Thursday at 06:00 UTC (08:00 SAST) — AI & Technology
+    - cron: '0 6 * * 4'
+  workflow_dispatch:
+    inputs:
+      topic_override:
+        description: 'Override topic for manual trigger (optional)'
+        required: false
+        default: ''
+
+jobs:
+  generate-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install anthropic requests
+
+      - name: Generate post
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TOPIC_OVERRIDE: ${{ github.event.inputs.topic_override }}
+        run: python .github/scripts/generate_post.py
+
+      - name: Commit and push post
+        run: |
+          git config --global user.name "Mothapo Doctrine Bot"
+          git config --global user.email "bot@mothapo-doctrine"
+          git add _posts/
+          git diff --staged --quiet || git commit -m "Auto-post: $(date +'%Y-%m-%d')"
+          git push
+
+      - name: Read post metadata
+        id: post_meta
+        run: python .github/scripts/read_post_meta.py
+
+      - name: Send Telegram notification
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          POST_TITLE: ${{ steps.post_meta.outputs.post_title }}
+          POST_URL: ${{ steps.post_meta.outputs.post_url }}
+          POST_EXCERPT: ${{ steps.post_meta.outputs.post_excerpt }}
+        run: python .github/scripts/notify_telegram.py

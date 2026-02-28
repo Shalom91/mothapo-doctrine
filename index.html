@@ -1,0 +1,27 @@
+---
+layout: default
+---
+
+<div class="home">
+
+  <div class="home-intro">
+    <p>Twice weekly. No noise. No balance for balance's sake. Just an honest read of what's happening and what it means.</p>
+  </div>
+
+  <div class="post-list">
+    {% for post in site.posts %}
+    <article class="post-preview">
+      <div class="post-preview-meta">
+        <span class="post-category">{{ post.category | upcase }}</span>
+        <span class="post-date">{{ post.date | date: "%B %-d, %Y" }}</span>
+      </div>
+      <h2 class="post-preview-title">
+        <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
+      </h2>
+      <p class="post-preview-excerpt">{{ post.excerpt | strip_html | truncate: 200 }}</p>
+      <a class="read-more" href="{{ post.url | relative_url }}">Read →</a>
+    </article>
+    {% endfor %}
+  </div>
+
+</div>
